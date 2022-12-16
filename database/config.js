@@ -6,7 +6,7 @@ const dbConnection = async() => {
 
     try {
 
-        await mongoose.connect( 'mongodb+srv://admin:Gonzalorlz123.@cluster0.umsdd.mongodb.net/ecostoneDB', {
+        await mongoose.connect( process.env.PORT, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
