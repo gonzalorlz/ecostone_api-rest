@@ -4,6 +4,7 @@ const {Inventario}  = require('../models');
 
 const obtenerInventarios = async(req, res = response ) => {
 
+
     const { limite = 100, desde = 0 } = req.query;
     const query = { estado: true };
 
@@ -22,6 +23,7 @@ const obtenerInventarios = async(req, res = response ) => {
 }
 
 const obtenerInventario = async(req, res = response ) => {
+   
 
     const { id } = req.params;
     const inventario = await Inventario.findById( id )
@@ -32,25 +34,32 @@ const obtenerInventario = async(req, res = response ) => {
 }
 
 const crearInventario = async(req, res = response ) => {
+    const fecha=new Date()
+
     const nombre = req.body.nombre.toUpperCase();
-    console.log(nombre)
-    Inventario
-    const inventarioDB = Inventario.findOne({ nombre });
+
+    const inventarioDB = await Inventario.findOne({ nombre });
+
     if ( inventarioDB ) {
         return res.status(400).json({
-            msg: `La categoria ${ inventarioDB.nombre }, ya existe`
+            msg: `el inventario :   ${ inventarioDB.nombre }, ya existe`
         });
     }
+
     // Generar la data a guardar
     const data = {
+        fecha,
         nombre,
         usuario: req.usuario._id
     }
+
     const inventario = new Inventario( data );
 
     // Guardar DB
     await inventario.save();
+
     res.status(201).json(inventario);
+
 }
 
 const actualizarInventario = async( req, res = response ) => {

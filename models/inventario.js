@@ -3,10 +3,10 @@ const { Schema, model } = require('mongoose');
 const InventarioSchema = Schema({
     nombre:{type:String},
     fecha: {
-        type: Date,
-       // required: [true, 'la fecha es obligatoria'],
-        //unique: true
-    },
+         type: Date,
+    //    // required: [true, 'la fecha es obligatoria'],
+    //     //unique: true
+     },
     estado: {
         type: Boolean,
         default: true,
