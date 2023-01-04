@@ -1,13 +1,15 @@
 const { response } = require('express');
 const { ObjectId } = require('mongoose').Types;
 
-const { Usuario, Categoria, Producto } = require('../models');
+const { Usuario, Categoria, Producto,Inventario } = require('../models');
 
 const coleccionesPermitidas = [
     'usuarios',
     'categorias',
     'productos',
-    'roles'
+    'roles',
+    'inventario',
+    'collections'
 ];
 
 const buscarUsuarios = async( termino = '', res = response ) => {
@@ -52,6 +54,25 @@ const buscarCategorias = async( termino = '', res = response ) => {
     });
 
 }
+const buscarInventarios = async( termino = '', res = response ) => {
+
+    const esMongoID = ObjectId.isValid( termino ); // TRUE 
+
+    if ( esMongoID ) {
+        const inventario = await Inventario.findById(termino);
+        return res.json({
+            results: ( inventario ) ? [ inventario ] : []
+        });
+    }
+
+    const regex = new RegExp( termino, 'i' );
+    const inventario = await Inventario.find({ nombre: regex, estado: true });
+
+    res.json({
+        results: inventario
+    });
+
+}
 
 const buscarProductos = async( termino = '', res = response ) => {
 
@@ -74,6 +95,7 @@ const buscarProductos = async( termino = '', res = response ) => {
     });
 
 }
+
 
 
 const buscar = ( req, res = response ) => {
