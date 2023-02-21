@@ -35,31 +35,25 @@ const obtenerInventario = async(req, res = response ) => {
 
 const crearInventario = async(req, res = response ) => {
     const fecha=new Date()
-
-    const nombre = req.body.nombre.toUpperCase();
-
+    const nombre = req.body.nombre
+    console.log(nombre)
     const inventarioDB = await Inventario.findOne({ nombre });
-
     if ( inventarioDB ) {
         return res.status(400).json({
             msg: `el inventario :   ${ inventarioDB.nombre }, ya existe`
         });
     }
-
     // Generar la data a guardar
     const data = {
-        fecha,
         nombre,
-        usuario: req.usuario._id
+        fecha,
+        arrayDetalle:[]
+        //usuario: req.usuario._id
     }
-
     const inventario = new Inventario( data );
-
     // Guardar DB
     await inventario.save();
-
     res.status(201).json(inventario);
-
 }
 
 const actualizarInventario = async( req, res = response ) => {
@@ -84,6 +78,51 @@ const borrarInventario = async(req, res =response ) => {
     res.json( inventarioBorrada );
 }
 
+const addProductoInventario=async (req,res=response)=>{
+
+    const codigo=req.body.codigo;
+    console.log('el coigo es : ', codigo)
+    const inventarioDB = await Inventario.findOne({ 'arrayDetalle.codigo':codigo });
+    if(!inventarioDB){
+        if (req.body._id) {
+            Inventario.updateOne({ _id: req.body._id }, {
+                    $push: {
+                        'arrayDetalle': {
+                            codigo: req.body.codigo,
+                        }
+                    }
+                },
+               (error) => {
+                    if (error) {
+                        return res.json({
+                            success: false,
+                            msj: 'No se pudo agregar el teléfono',
+                            err
+                        });
+                    } else {
+                        return res.json({
+                            success: true,
+                            msj: 'Se agregó correctamente el teléfono'
+                        });
+                    }
+                }
+            )
+        } else {
+            return res.json({
+                success: false,
+                msj: 'No se pudo agregar el teléfono, por favor verifique que el _id sea correcto'
+            });
+        }
+    }else{
+        return res.json({
+            success: false,
+            msj: 'ya existe este codigo'
+           
+        });
+    }
+}
+
+
 
 
 
@@ -92,5 +131,6 @@ module.exports = {
     obtenerInventario,
     obtenerInventarios,
     actualizarInventario,
-    borrarInventario
+    borrarInventario,
+    addProductoInventario
 }

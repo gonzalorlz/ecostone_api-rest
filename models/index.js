@@ -16,6 +16,6 @@ module.exports = {
     Role,
     Server,
     Usuario,
-    Inventario
+    Inventario,
 }
 

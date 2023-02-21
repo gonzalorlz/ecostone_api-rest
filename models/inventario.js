@@ -1,29 +1,23 @@
 const { Schema, model } = require('mongoose');
 
-const InventarioSchema = Schema({
-    nombre:{type:String},
-    fecha: {
-         type: Date,
-    //    // required: [true, 'la fecha es obligatoria'],
-    //     //unique: true
-     },
-    estado: {
-        type: Boolean,
-        default: true,
-       // required: true
-    },
-    usuario: {
-        type: Schema.Types.ObjectId,
-        ref: 'Usuario',
-   
-    }
-});
-
-
-InventarioSchema.methods.toJSON = function() {
+const datosSchema = new Schema({
+    codigo: {type: String},
+    // stock: {type: String,require:true},
+    // descripcion:{type: String,require:true},
+    // categoria:{type: String,require:true},
+  })
+  
+  const inventarioSchema = new Schema({
+    nombre: { type: String, unique: true,require:true },
+    // Array of subdocuments
+     arrayDetalle: [datosSchema],
+    // // Single subdocument
+    // singleDetalle: datosSchema
+  })
+  
+  inventarioSchema.methods.toJSON = function() {
     const { __v, estado, ...data  } = this.toObject();
     return data;
 }
 
-
-module.exports = model( 'Inventario', InventarioSchema );
+  module.exports = model( 'Inventario', inventarioSchema );

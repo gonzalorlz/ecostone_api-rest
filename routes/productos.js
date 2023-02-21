@@ -7,9 +7,11 @@ const { crearProducto,
         obtenerProductos,
         obtenerProducto,
         actualizarProducto, 
-        borrarProducto } = require('../controllers/productos');
+        borrarProducto,
+        agregarDetalleProducto, } = require('../controllers/productos');
 
 const { existeCategoriaPorId, existeProductoPorId } = require('../helpers/db-validators');
+const { route } = require('./auth');
 
 const router = Router();
 
@@ -27,6 +29,7 @@ router.get('/:id',[
     validarCampos,
 ], obtenerProducto );
 
+
 // Crear categoria - privado - cualquier persona con un token válido
 router.post('/', [ 
     validarJWT,
@@ -35,6 +38,11 @@ router.post('/', [
     check('categoria').custom( existeCategoriaPorId ),
     validarCampos
 ], crearProducto );
+
+router.post('/:id',[
+    //validarJWT,
+    check('name','el nombre es obligatorio' ).not().isEmpty
+],agregarDetalleProducto);
 
 // Actualizar - privado - cualquiera con token válido
 router.put('/:id',[

@@ -4,7 +4,7 @@ const { Producto } = require('../models');
 
 const obtenerProductos = async(req, res = response ) => {
 
-    const { limite = 5, desde = 0 } = req.query;
+    const { limite = 100, desde = 0 } = req.query;
     const query = { estado: true };
 
     const [ total, productos ] = await Promise.all([
@@ -34,26 +34,22 @@ const obtenerProducto = async(req, res = response ) => {
 }
 
 const crearProducto = async(req, res = response ) => {
-
     const { estado, usuario, ...body } = req.body;
-
     const productoDB = await Producto.findOne({ nombre: body.nombre });
-
     if ( productoDB ) {
         return res.status(400).json({
             msg: `El producto ${ productoDB.nombre }, ya existe`
         });
     }
-
     // Generar la data a guardar
     const data = {
+       
         ...body,
-        nombre: body.nombre.toUpperCase(),
+        nombre: body.nombre,
         usuario: req.usuario._id
     }
 
     const producto = new Producto( data );
-
     // Guardar DB
     await producto.save();
 
@@ -86,6 +82,37 @@ const borrarProducto = async(req, res = response ) => {
     res.json( productoBorrado );
 }
 
+const agregarDetalleProducto= async (req,res=response)=>{
+    print('entro');
+    let body=req.body;
+    let error;
+    let detalles=JSON.parse(body.detalle);
+
+    detalles.forEach(detalle=>{
+        Producto.updateOne({
+            $push:{
+                'detalles':detalle
+            }
+        }),
+        (err)=>{
+            if(err){
+                error=err
+            }
+        }
+    });
+    if(error){
+        return res.json({
+            sucess:false,
+            msj:'no pudimos agregar producto',error
+        })
+    }else{
+        return res.json({
+            sucess:true,
+            msj:'se agrego producto de forma correcta'
+    }
+);
+ } }
+
 
 
 
@@ -94,5 +121,7 @@ module.exports = {
     obtenerProductos,
     obtenerProducto,
     actualizarProducto,
-    borrarProducto
+    borrarProducto,
+    agregarDetalleProducto,
+
 }
