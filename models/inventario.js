@@ -9,6 +9,7 @@ const datosSchema = new Schema({
   
   const inventarioSchema = new Schema({
     nombre: { type: String, unique: true,require:true },
+    fecha:{type:DateTime},
     // Array of subdocuments
      arrayDetalle: [datosSchema],
     // // Single subdocument
