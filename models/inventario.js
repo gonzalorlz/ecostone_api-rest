@@ -2,9 +2,9 @@ const { Schema, model } = require('mongoose');
 
 const datosSchema = new Schema({
     codigo: {type: String},
-    // stock: {type: String,require:true},
-    // descripcion:{type: String,require:true},
-    // categoria:{type: String,require:true},
+    stock: {type: String},
+    descripcion:{type: String},
+    categoria:{type: String},
   })
   
   const inventarioSchema = new Schema({

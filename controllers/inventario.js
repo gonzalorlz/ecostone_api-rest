@@ -1,25 +1,17 @@
 const { response } = require('express');
 const {Inventario}  = require('../models');
+const inventario = require('../models/inventario');
 
 
 const obtenerInventarios = async(req, res = response ) => {
+    const inventarios = await Inventario.find();
+    if (inventarios){
+        res.json({
+            //total,
+            inventarios
+        });
+    }
 
-
-    const { limite = 100, desde = 0 } = req.query;
-    const query = { estado: true };
-
-    const [ total, inventario ] = await Promise.all([
-        Inventario.countDocuments(query),
-        Inventario.find(query)
-            .populate('usuario', 'nombre')
-            .skip( Number( desde ) )
-            .limit(Number( limite ))
-    ]);
-
-    res.json({
-        total,
-        inventario
-    });
 }
 
 const obtenerInventario = async(req, res = response ) => {
@@ -34,6 +26,29 @@ const obtenerInventario = async(req, res = response ) => {
 }
 
 const crearInventario = async(req, res = response ) => {
+    const fecha=new Date()
+    const nombre = req.body.nombre
+    console.log(nombre)
+    const inventarioDB = await Inventario.findOne({ nombre });
+    if ( inventarioDB ) {
+        return res.status(400).json({
+            msg: `el inventario :   ${ inventarioDB.nombre }, ya existe`
+        });
+    }
+    // Generar la data a guardar
+    const data = {
+        nombre,
+        fecha,
+        arrayDetalle:[]
+        //usuario: req.usuario._id
+    }
+    const inventario = new Inventario( data );
+    // Guardar DB
+    await inventario.save();
+    res.status(201).json(inventario);
+}
+
+const newCreateInventario = async(req, res = response ) => {
     const fecha=new Date()
     const nombre = req.body.nombre
     console.log(nombre)
@@ -79,17 +94,19 @@ const borrarInventario = async(req, res =response ) => {
 }
 
 const addProductoInventario=async (req,res=response)=>{
+    const array=req.body.arrayDetalle
+    const _id=req.body._id;
+    const codigo=req.body.arrayDetalle.codigo
 
-    const codigo=req.body.codigo;
-    console.log('el coigo es : ', codigo)
-    const inventarioDB = await Inventario.findOne({ 'arrayDetalle.codigo':codigo });
-    if(!inventarioDB){
+
+   //const inventarioDB = await Inventario.findOne({ 'arrayDetalle.codigo':codigo });
+    //console.log(inventarioDB)
+    const tem= false;
+    if(!tem){
         if (req.body._id) {
             Inventario.updateOne({ _id: req.body._id }, {
                     $push: {
-                        'arrayDetalle': {
-                            codigo: req.body.codigo,
-                        }
+                        'arrayDetalle': array
                     }
                 },
                (error) => {
