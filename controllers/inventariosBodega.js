@@ -1,12 +1,12 @@
 const { response } = require('express');
-const {Inventario}  = require('../models');
+const {InventariosBodega}  = require('../models');
 
 const obtenerInventarios = async(req, res = response ) => {
-    const inventarios = await Inventario.find();
-    if (inventarios){
+    const inventariosBodega = await InventariosBodega.find();
+    if (inventariosBodega){
         res.json({
             //total,
-            inventarios
+            inventariosBodega
         });
     }
 
@@ -16,7 +16,7 @@ const obtenerInventario = async(req, res = response ) => {
    
 
     const { id } = req.params;
-    const inventario = await Inventario.findById( id )
+    const inventario = await InventariosBodega.findById( id )
                             .populate('usuario', 'nombre');
 
     res.json( inventario );
@@ -27,7 +27,7 @@ const crearInventario = async(req, res = response ) => {
     const fecha=new Date()
     const nombre = req.body.nombre
     console.log(nombre)
-    const inventarioDB = await Inventario.findOne({ nombre });
+    const inventarioDB = await InventariosBodega.findOne({ nombre });
     if ( inventarioDB ) {
         return res.status(400).json({
             msg: `el inventario :   ${ inventarioDB.nombre }, ya existe`
@@ -40,7 +40,7 @@ const crearInventario = async(req, res = response ) => {
         arrayDetalle:[]
         //usuario: req.usuario._id
     }
-    const inventario = new Inventario( data );
+    const inventario = new InventariosBodega( data );
     // Guardar DB
     await inventario.save();
     res.status(201).json(inventario);
@@ -50,7 +50,7 @@ const newCreateInventario = async(req, res = response ) => {
     const fecha=new Date()
     const nombre = req.body.nombre
     console.log(nombre)
-    const inventarioDB = await Inventario.findOne({ nombre });
+    const inventarioDB = await InventariosBodega.findOne({ nombre });
     if ( inventarioDB ) {
         return res.status(400).json({
             msg: `el inventario :   ${ inventarioDB.nombre }, ya existe`
@@ -63,7 +63,7 @@ const newCreateInventario = async(req, res = response ) => {
         arrayDetalle:[]
         //usuario: req.usuario._id
     }
-    const inventario = new Inventario( data );
+    const inventario = new InventariosBodega( data );
     // Guardar DB
     await inventario.save();
     res.status(201).json(inventario);
@@ -77,7 +77,7 @@ const actualizarInventario = async( req, res = response ) => {
     data.nombre  = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
 
-    const inventario = await Inventario.findByIdAndUpdate(id, data, { new: true });
+    const inventario = await InventariosBodega.findByIdAndUpdate(id, data, { new: true });
 
     res.json( inventario );
 
@@ -86,7 +86,7 @@ const actualizarInventario = async( req, res = response ) => {
 const borrarInventario = async(req, res =response ) => {
 
     const { id } = req.params;
-    const inventarioBorrada = await Inventario.findByIdAndUpdate( id, { estado: false }, {new: true });
+    const inventarioBorrada = await InventariosBodega.findByIdAndUpdate( id, { estado: false }, {new: true });
 
     res.json( inventarioBorrada );
 }
@@ -102,7 +102,7 @@ const addProductoInventario=async (req,res=response)=>{
     const tem= false;
     if(!tem){
         if (req.body._id) {
-            Inventario.updateOne({ _id: req.body._id }, {
+            InventariosBodega.updateOne({ _id: req.body._id }, {
                     $push: {
                         'arrayDetalle': array
                     }
@@ -136,9 +136,6 @@ const addProductoInventario=async (req,res=response)=>{
         });
     }
 }
-
-
-
 
 module.exports = {
     crearInventario,

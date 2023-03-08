@@ -6,6 +6,7 @@ const Role = require('./role');
 const Server = require('./server');
 const Usuario = require('./usuario');
 const Inventario = require('./inventario');
+const InventariosBodega = require('./inventariosBodega');
 
 
 
@@ -17,5 +18,6 @@ module.exports = {
     Server,
     Usuario,
     Inventario,
+    InventariosBodega,
 }
 
