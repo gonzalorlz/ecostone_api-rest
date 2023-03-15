@@ -7,6 +7,7 @@ const Server = require('./server');
 const Usuario = require('./usuario');
 const Inventario = require('./inventario');
 const InventariosBodega = require('./inventariosBodega');
+const Codigo = require('./codigo');
 
 
 
@@ -19,5 +20,6 @@ module.exports = {
     Usuario,
     Inventario,
     InventariosBodega,
+    Codigo
 }
 

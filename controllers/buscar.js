@@ -12,6 +12,9 @@ const coleccionesPermitidas = [
     'collections'
 ];
 
+
+
+
 const buscarUsuarios = async( termino = '', res = response ) => {
 
     const esMongoID = ObjectId.isValid( termino ); // TRUE 

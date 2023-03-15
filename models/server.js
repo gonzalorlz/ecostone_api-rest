@@ -20,6 +20,7 @@ class Server {
             inventario: '/api/inventario',
             collection: '/api/collections',
             inventariosBodega: '/api/inventariosBodega',
+            codigos:'/api/codigos',
         }
 
 
@@ -69,6 +70,7 @@ class Server {
         this.app.use( this.paths.inventario, require('../routes/inventario'));
         this.app.use( this.paths.collection, require('../routes/collections'));
         this.app.use( this.paths.inventariosBodega, require('../routes/inventariosBodega'));
+        this.app.use( this.paths.codigos, require('../routes/codigos'));
     
     }
 
