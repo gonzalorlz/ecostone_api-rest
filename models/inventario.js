@@ -5,6 +5,7 @@ const datosSchema = new Schema({
     stock: {type: String},
     descripcion:{type: String},
     categoria:{type: String},
+    codigoFsl:{type: String},
   })
   
   const inventarioSchema = new Schema({
