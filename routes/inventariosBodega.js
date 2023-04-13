@@ -2,7 +2,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarJWT, validarCampos, esAdminRole } = require('../middlewares');
 const { obtenerInventarios,
-        obtenerInventario,
+        obtenerInventarioBodega,
         crearInventario,
         actualizarInventario, 
         addProductoInventario,
@@ -11,10 +11,10 @@ const { existeInventarioPorId } = require('../helpers/db-validators');
 const router = Router();
 router.get('/', obtenerInventarios );
 router.get('/:id',[
-    check('id', 'No es un id de Mongo válido').isMongoId(),
-    check('id').custom( existeInventarioPorId ),
-    validarCampos,
-], obtenerInventario );
+    //check('id', 'No es un id de Mongo válido').isMongoId(),
+    //check('id').custom( existeInventarioPorId ),
+    //,
+], obtenerInventarioBodega );
 
 // Crear inventario - privado - cualquier persona con un token válido
 router.post('/', [ 

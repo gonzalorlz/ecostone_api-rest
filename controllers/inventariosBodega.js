@@ -12,13 +12,11 @@ const obtenerInventarios = async(req, res = response ) => {
 
 }
 
-const obtenerInventario = async(req, res = response ) => {
-   
-
+const obtenerInventarioBodega = async(req, res = response ) => {
     const { id } = req.params;
-    const inventario = await InventariosBodega.findById( id )
-                            .populate('usuario', 'nombre');
-
+    console.log(id)
+    const inventario = await InventariosBodega.findById( id )   
+    console.log(inventario)     
     res.json( inventario );
 
 }
@@ -139,10 +137,10 @@ const addProductoInventario=async (req,res=response)=>{
 
 module.exports = {
     crearInventario,
-    obtenerInventario,
     obtenerInventarios,
     actualizarInventario,
     borrarInventario,
     addProductoInventario,
+    obtenerInventarioBodega
     
 }
