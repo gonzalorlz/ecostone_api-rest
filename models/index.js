@@ -12,6 +12,7 @@ const Codigo = require('./codigo');
 
 
 
+
 module.exports = {
     Categoria,
     Producto,
@@ -20,6 +21,7 @@ module.exports = {
     Usuario,
     Inventario,
     InventariosBodega,
-    Codigo
+    Codigo,
+
 }
 

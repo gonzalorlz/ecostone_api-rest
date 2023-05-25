@@ -1,7 +1,8 @@
 const { response } = require('express');
 const { ObjectId } = require('mongoose').Types;
 
-const { Usuario, Categoria, Producto,Inventario } = require('../models');
+const { Usuario, Categoria, Producto,Inventario, InventariosBodega } = require('../models');
+
 
 const coleccionesPermitidas = [
     'usuarios',
@@ -9,7 +10,8 @@ const coleccionesPermitidas = [
     'productos',
     'roles',
     'inventario',
-    'collections'
+    'collections',
+    'inventariosBodega'
 ];
 
 
@@ -37,6 +39,23 @@ const buscarUsuarios = async( termino = '', res = response ) => {
     });
 
 }
+const buscarInventarioBodega = async( termino = '', res = response ) => {
+    const esMongoID = ObjectId.isValid( termino ); // TRUE 
+    if ( esMongoID ) {
+        const InventariosBodega = await InventariosBodega.findById(termino);
+        return res.json({
+            results: ( inventariosBodega ) ? [ inventariosBodega ] : []
+        });
+    }
+    const regex = new RegExp( termino, 'i' );
+    const inventariosBodegas = await InventariosBodega.find({
+        $or: [{ codigo: regex }]
+    });
+    res.json({
+        results: inventariosBodegas
+    });
+
+}
 
 const buscarCategorias = async( termino = '', res = response ) => {
 
@@ -44,9 +63,11 @@ const buscarCategorias = async( termino = '', res = response ) => {
 
     if ( esMongoID ) {
         const categoria = await Categoria.findById(termino);
-        return res.json({
+        return res.json(
+            {
             results: ( categoria ) ? [ categoria ] : []
-        });
+        }
+        );
     }
 
     const regex = new RegExp( termino, 'i' );
@@ -99,8 +120,6 @@ const buscarProductos = async( termino = '', res = response ) => {
 
 }
 
-
-
 const buscar = ( req, res = response ) => {
     
     const { coleccion, termino  } = req.params;
@@ -112,6 +131,9 @@ const buscar = ( req, res = response ) => {
     }
 
     switch (coleccion) {
+        case 'inventariosBodega':
+            buscarInventarioBodega(termino,res);
+            break;
         case 'usuarios':
             buscarUsuarios(termino, res);
         break;
@@ -133,5 +155,6 @@ const buscar = ( req, res = response ) => {
 
 
 module.exports = {
-    buscar
+    buscar,
+    
 }

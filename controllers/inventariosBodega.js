@@ -92,7 +92,7 @@ const borrarInventario = async(req, res =response ) => {
 const addProductoInventario=async (req,res=response)=>{
     const array=req.body.arrayDetalle
     const _id=req.body._id;
-    const codigo=req.body.arrayDetalle.codigo
+    //const codigo=req.body.arrayDetalle.codigo
 
 
    //const inventarioDB = await Inventario.findOne({ 'arrayDetalle.codigo':codigo });
